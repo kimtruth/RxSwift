@@ -184,20 +184,20 @@
 * 다음의 코드를 작성한다.
 
 	```swift
-	// 1
+	// a
 	    static func save(_ image: UIImage) -> Observable<String> {
 	        return Observable.create({ observer in
 
-	            // 2
+	            // b
 	            var savedAssetId: String?
 	            PHPhotoLibrary.shared().performChanges({
 
-	                // 3
+	                // c
 	                let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
 	                savedAssetId = request.placeholderForCreatedAsset?.localIdentifier
 	            }, completionHandler: { success, error in
 
-	                // 4
+	                // d
 	                DispatchQueue.main.async {
 	                    if success, let id = savedAssetId {
 	                        observer.onNext(id)
@@ -208,19 +208,19 @@
 	                }
 	            })
 
-	            // 5
+	            // e
 	            return Disposables.create()
 	        })
 	    }
 	```
 
 	* 주석을 따라 하나씩 살펴보자
-		* 1) `save(_:)` 함수를 만든다. 해당 함수는 `Observable<String>`을 리턴할 것이다. 왜냐하면 사진을 저장한 다음에는 생성된 하나의 요소를 방출할 것이기 때문이다.
+		1) `save(_:)` 함수를 만든다. 해당 함수는 `Observable<String>`을 리턴할 것이다. 왜냐하면 사진을 저장한 다음에는 생성된 하나의 요소를 방출할 것이기 때문이다.
 			* `Observable.create(_)`는 새로운 `Observable`을 생성할 것이기 때문에 어떤 Observable을 생성할 것인지를 이 클로저 내부에서 구현해야 한다.
-		* 2) `performChanges(_:completionHandler:)`의 첫 번째 클로저 파라미터에서 제공된 이미지를 통해 콜라주된 사진을 생성할 것이다. 그리고 두 번째 클로저 파라미터에서 assetID 또는 `.error` 이벤트를 방출하게 될 것이다.
-		* 3) `PHAssetChangeRequest.creationRequestForAsset(from:)`을 통해 새로운 사진세트를 만들 수 있고 이건 `savedAssetId`에 있는 해당 id로 저장할 것이다.
-		* 4) 만약 성공 리스폰스를 받고 `savedAssetId`가 유효한 assetID 라면 `.next`와 `.completed` 이벤트를 방출할 것이다. 그렇지 않다면 `.error` 이벤트를 통해 에러를 방출할 것이다.
-		* 5) `Disposible`이 리턴되도록 한다. (`.create`)의 리턴 값
+		2) `performChanges(_:completionHandler:)`의 첫 번째 클로저 파라미터에서 제공된 이미지를 통해 콜라주된 사진을 생성할 것이다. 그리고 두 번째 클로저 파라미터에서 assetID 또는 `.error` 이벤트를 방출하게 될 것이다.
+		3) `PHAssetChangeRequest.creationRequestForAsset(from:)`을 통해 새로운 사진세트를 만들 수 있고 이건 `savedAssetId`에 있는 해당 id로 저장할 것이다.
+		4) 만약 성공 리스폰스를 받고 `savedAssetId`가 유효한 assetID 라면 `.next`와 `.completed` 이벤트를 방출할 것이다. 그렇지 않다면 `.error` 이벤트를 통해 에러를 방출할 것이다.
+		5) `Disposible`이 리턴되도록 한다. (`.create`)의 리턴 값
 * 왜 `.next`이벤트만 방출하는 `Observable`이 필요할까? 의문이 들 수 있다. 당연히 그렇지 않다. 다른 연산자들도 사용가능하다. 에를 들면,
 	* `Observable.never()`: 어떤 요소도 방출하지 않는 Observable sequence
 	* `Observable.just(_:)`: `.completed` 이벤트와 하나의 요소만 방출.
@@ -266,8 +266,8 @@
 * 하나 기억해야 할 것은, observable을 completable로 바꿀 수 없다는 것이다.
 * observable이 값요소를 방출한 이상, 이 것을 completable로 바꿀 수는 없다.
 * completable sequence를 생성하고 싶으면 `Completable.create({...})`을 통해 생성하는 수 밖에 없다. 이 코드는 다른 observable을 `create`를 이용하여 생성한 방식이랑 매우 유사하다.
-* `Completeble`은 어떠한 값도 방출하지 않는다는 것을 기억해야 한다. 솔직히 이런게 왜 필요한가 싶을 것이다.
-	* 하지만, 동기식 연산의 성공여부를 확인할 때 `completeble`은 아주 많이 쓰인다.
+* `Completable`은 어떠한 값도 방출하지 않는다는 것을 기억해야 한다. 솔직히 이런게 왜 필요한가 싶을 것이다.
+	* 하지만, 동기식 연산의 성공여부를 확인할 때 `completable`은 아주 많이 쓰인다.
 * 작업했던 `Combinestagram` 예제를 통해 생각해보자.
 	* 유저가 작업할 동안 자동저장되는 기능을 만들고 싶다.
 	* background queue에서 비동기적으로 작업한 다음에, 완료가되면 작은 노티를 띄우거나 저장 중 오류가 생기면  alert을 띄우고 싶다.
