@@ -18,7 +18,7 @@ public func example(of description: String, action: () -> Void) {
 * Observable이 무엇인지, 어떻게 만드는지, 어떻게 사용하는지에 대해서 알아볼 것임
 * `observable` = `observable sequence` = `sequence`: 각각의 단어를 계속 보게 될 것인데 이는 곧 다 같은 말이다. (Everything is a sequence)
 * 중요한 것은 이 모든 것들이 **비동기적(asynchronous**)이라는 것.
-* Observable 들은 일정 기간 동안 계속해서 **이벤트**를 생성하며, 이러한 과정을 보통 **emitting**(방출)이라고 표현한다. 
+* Observable 들은 일정 기간 계속해서 **이벤트**를 생성하며, 이러한 과정을 보통 **emitting**(방출)이라고 표현한다. 
 * 각각의 이벤트들은 숫자나 커스텀한 인스턴스 등과 같은 **값**을 가질 수 있으며, 또는 탭과 같은 **제스처**를 인식할 수도 있다. 
 * 이러한 개념들을 가장 잘 이해할 수 있는 방법은 marble diagrams를 이용하는 것이다. 
 	* marble diagram?: 시간의 흐름에 따라서 값을 표시하는 방식
@@ -29,24 +29,24 @@ public func example(of description: String, action: () -> Void) {
 
 <img src = "https://github.com/fimuxd/RxSwift/blob/master/Lectures/02_Observables/1.%20marble.png?raw=true" height = 50>
 
-* 상단의 Marble diagram을 보면 세 개의 구성요소를 확인 할 수 있다. 
+* 상단의 Marble diagram을 보면 세 개의 구성요소를 확인할 수 있다. 
 * Observable은 앞서 설명했던 `next` 이벤트를 통해 각각의 요소들을 방출하는 것.
 
 <img src = "https://github.com/fimuxd/RxSwift/blob/master/Lectures/02_Observables/2.%20lifecycle1.png?raw=true" height = 50>
 
-* 이 Observable은 세 개의 tap 이벤트를 방출한 뒤 완전종료됨. 이 것을 앞서 말한 대로 `completed` 이벤트라고 한다.
+* 이 Observable은 세 개의 tap 이벤트를 방출한 뒤 완전종료됨. 이것을 앞서 말한 대로 `completed` 이벤트라고 한다.
 
 <img src = "https://github.com/fimuxd/RxSwift/blob/master/Lectures/02_Observables/3.%20lifecycle2.png?raw=true" height = 50>
 
 * 이 marble diagram에서는 상단의 예시들과 다르게 에러가 발생한 것.
-* Observable이 완전종료되었다는 면에선 다를게 없지만, `error` 이벤트를 통해 종료된 것
+* Observable이 완전종료되었다는 면에선 다를 게 없지만, `error` 이벤트를 통해 종료된 것
 
 > 정리하면, 
 >
 > * Observable은 어떤 구성요소를 가지는 `next` 이벤트를 계속해서 방출할 수 있다.
 > * Observable은 `error` 이벤트를 방출하여 완전 종료될 수 있다.
 >
-> * Observable은 `complete` 이벤트를 방출하여 완전 종료 될 수 있다.
+> * Observable은 `complete` 이벤트를 방출하여 완전 종료될 수 있다.
 
 * RxSwift 소스코드 예제를 살펴보자. 예제에서 이러한 이벤트들은 enum 케이스로 표현되고 있다.
 
@@ -86,11 +86,11 @@ public func example(of description: String, action: () -> Void) {
 	    let observable:Observable<Int> = Observable<Int>.just(one)
 	}
 	``` 
-	* 이 코드로 해야할 것
+	* 이 코드로 해야 할 것
 		* i) 다음 예제에서 사용할 Int 상수를 정의
 		* ii) `one` 정수를 이용한 `just` method를 통해 `Int` 타입의 Observable sequence를 만들 것
 	* `just`는 `Observable`의 타입 메소드. 이름에서 추측할 수 있듯, 오직 하나의 요소를 포함하는 Observable sequence를 생성한다.
-		* 내가 이해한게 맞다면 상기코드의 `observable`은 `1` 을 뿜! 할 듯.
+		* 내가 이해한 게 맞는다면 상기 코드의 `observable`은 `1` 을 뿜! 할 듯.
 	* Rx에는 ***operator***(연산자)가 있으니 이걸 이용할 수 있을 것임
 * 상기 코드 하단에 아래 코드를 추가해봅시다.
 
@@ -99,7 +99,7 @@ public func example(of description: String, action: () -> Void) {
 	```  
 	* `observable2`의 타입은 `Observable<Int>`
 	* `.of` 연산자는 주어진 값들의 타입추론을 통해 `Observable` sequence를 생성함.
-	* 따라서, 어떤 array를 observable array로 만들고 싶다면, array를 `.of` 연산자에 집어 넣으면 된다.
+	* 따라서, 어떤 array를 observable array로 만들고 싶다면, array를 `.of` 연산자에 집어넣으면 된다.
 	* [Marble diagram 확인](http://rxmarbles.com/#of)
 
 * 아래 코드도 추가해 봅시다.
@@ -110,7 +110,7 @@ public func example(of description: String, action: () -> Void) {
 	* `observable3`의 타입은 `Observable<[Int]>`
 	* 이렇게 하면 `just` 연산자를 쓴 것과 같이 `[1,2,3]`를 단일요소로 가지게 된다. 
 
-* `Observable`을 만들 수 있는 또다른 연산자는 `from` 이다.
+* `Observable`을 만들 수 있는 또 다른 연산자는 `from` 이다.
 	```swift
 	let observable4 = Observable.from([one, two, three])
 	``` 
@@ -121,7 +121,7 @@ public func example(of description: String, action: () -> Void) {
 
 ## E. Observable 구독
 
-> Tip: 사실 구독이라 표현한 부분은 *subscribing*을 사전적의미 그대로 번역한 것에 불과합니다. 그래서 정확히 어떤 의미인지 두호님께 물어봤었는데, 사실 각각의 케이스에 대해서 해당 *subscribing*이 어떤 의미인지 질문을 한다면 명확한 답을 드릴 수 있지만, 단순히 Observable에서 *subscribing*이 어떤 의미인지 이해하시려면 여러가지 케이스와 경험을 통해서 그 느낌을 축적하시는 수 밖에 없다고 하시네요. 그래서 일단은 하단의 내용처럼 책에서 서술한 내용을 단순번역 해보겠습니다. 그리고 시간이 지나서 다시 읽어보면 수정할 부분이 많이 생길 것 같습니다. 
+> Tip: 사실 구독이라 표현한 부분은 *subscribing*을 사전적 의미 그대로 번역한 것에 불과합니다. 그래서 정확히 어떤 의미인지 두호님께 물어봤었는데, 사실 각각의 케이스에 대해서 해당 *subscribing*이 어떤 의미인지 질문을 한다면 명확한 답을 드릴 수 있지만, 단순히 Observable에서 *subscribing*이 어떤 의미인지 이해하시려면 여러 가지 케이스와 경험을 통해서 그 느낌을 축적하시는 수 밖에 없다고 하시네요. 그래서 일단은 하단의 내용처럼 책에서 서술한 내용을 단순번역해 보겠습니다. 그리고 시간이 지나서 다시 읽어보면 수정할 부분이 많이 생길 것 같습니다. 
 
 * iOS 개발자라면 `NotificationCenter`에 익숙할 것이다. 하단의 예제는 클로저 문법을 이용해서  `UIKeyboardDidChangeFrame` notification의 observer를 나타낸 것이다.
 
@@ -327,7 +327,7 @@ public func example(of description: String, action: () -> Void) {
 	```
 	* 주석대로 하나씩 살펴보면, 
 		* 1) 어떤 string 의 Observable을 생성
-		* 2) 이 Observable을 구독해봅니다. 여기서는 `subscripe`를 이용해 `Disposable`을 리턴하도록 한다.
+		* 2) 이 Observable을 구독해봅니다. 여기서는 `subscribe`를 이용해 `Disposable`을 리턴하도록 한다.
 		* 3) 출력된 각각의 이벤트들을 프린트 한다.
 	* 여기서 구독을 취소하고 싶으면 `dispose()`를 호출하면 된다. 구독을 취소하거나 *dispose* 한 뒤에는 이벤트 방출이 정지된다.
     * 현재 `observable` 안에는 3개의 요소만 있으므로 `dispose()` 를 호출하지 않아도 `Completed`가 프린트 되지만, 요소가 무한히 있다면 `dispose()` 를 호출해야 `Completed` 가 프린트 된다.
@@ -357,7 +357,7 @@ public func example(of description: String, action: () -> Void) {
 		* 2) observable을 만든다
 		* 3) 방출하는 이벤트를 프린팅한다.
 		* 4) `subscribe`로부터 방출된 리턴 값을 `disposeBag`에 추가한다.
-	* 이러한 패턴은 앞으로 아주 흔하게 사용하게 될 패턴이다. (observable에 대해 subscribing 하고 이 것을 즉시 dispose bag에 추가하는 것)
+	* 이러한 패턴은 앞으로 아주 흔하게 사용하게 될 패턴이다. (observable에 대해 subscribing 하고 이것을 즉시 dispose bag에 추가하는 것)
 * 귀찮게 이런 짓을 왜 매번 해야하는걸까?
 	* 만약 dispose bag을 subscription에 추가하거나 수동적으로 `dispose`를 호출하는 것을 빼먹는다면, 당연히 메모리 누수가 일어날 것이다. 
 	* 하지만 걱정마. Swift 컴파일러가 disposable을 쓰지 않을 때마다 경고를 날려줄거임 ^^
