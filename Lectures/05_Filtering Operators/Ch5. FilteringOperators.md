@@ -77,7 +77,7 @@
 	
 	* 주석을 따라 보면
 		* 1) PublishSubject와 DisposeBag을 만든다.
-		* 2) Publish Subject를 구독하는데, 이번에는 `.elementAt(2)`를 추가한다. 2번째 인덱스, 즉, 3 번째 값을 뱉을 것이다.
+		* 2) PublishSubject를 구독하는데, 이번에는 `.elementAt(2)`를 추가한다. 2번째 인덱스, 즉, 3 번째 값을 뱉을 것이다.
 		* 3) `.completed`나 `.error`가 아닌데도 콘솔에 "You're out!"이 출력된다.
 
 ### 3. .filter
@@ -96,13 +96,13 @@
 	    
 	    let disposeBag = DisposeBag()
 	    
-	    // 1
+	    // a
 	    Observable.of(1,2,3,4,5,6)
-	        // 2
+	        // b
 	        .filter({ (int) -> Bool in
 	            int % 2 == 0
 	        })
-	        // 3
+	        // c
 	        .subscribe(onNext: {
 	            print($0)
 	        })
@@ -111,9 +111,9 @@
 	```
 	
 	* 주석을 따라 하나씩 살펴보면,
-		* 1) `Int`를 받는 observable을 만든다.
-		* 2) `filter`를 사용하여 홀수를 제외하는 로직을 작성한다. `filter`는 각각의 요소들을 확인하여 `true`인 요소들만 출력하고 그렇지 않은 아이들은 무시한다.
-		* 3) 구독하여 방출된 아이들을 프린트 하도록 한다. `2 4 6`이 프린트 된다.
+		1) `Int`를 받는 observable을 만든다.
+		2) `filter`를 사용하여 홀수를 제외하는 로직을 작성한다. `filter`는 각각의 요소들을 확인하여 `true`인 요소들만 출력하고 그렇지 않은 아이들은 무시한다.
+		3) 구독하여 방출된 아이들을 프린트 하도록 한다. `2 4 6`이 프린트 된다.
 
 
 ## C. Skipping operators
@@ -132,9 +132,9 @@
 	example(of: "skip") {
 	    let disposeBag = DisposeBag()
 	    
-	    // 1
+	    // a
 	    Observable.of("A", "B", "C", "D", "E", "F")
-	        // 2
+	        // b
 	        .skip(3)
 	        .subscribe(onNext: {
 	            print($0)
@@ -144,8 +144,8 @@
 	```
 	
 	* 주석을 따라 확인해보면,
-		* 1) `String`의 Observable을 만든다.
-		* 2) 3번째까지의 요소를 skip하도록 하고, 구독한다. 
+		1) `String`의 Observable을 만든다.
+		2) 3번째까지의 요소를 skip하도록 하고, 구독한다. 
 		* 처음 세개 요소인 `A`, `B`, `C`는 skip되고 뒤의 `D`, `E`, `F` 가 출력된다.
 
 ### 2. skipWhile
@@ -165,9 +165,9 @@
 	    
 	    let disposeBag = DisposeBag()
 	    
-	    // 1
+	    // a
 	    Observable.of(2, 2, 3, 4, 4)
-	        //2
+	        // b
 	        .skipWhile({ (int) -> Bool in
 	            int % 2 == 0
 	        })
@@ -179,8 +179,8 @@
 	``` 
 	
 	* 주석을 따라가보자
-		* 1) Observable을 생성한다
-		* 2) 홀수인 요소가 나올 때까지 skip하기 위해 `skipWhile` 을 사용한다.
+		1) Observable을 생성한다
+		2) 홀수인 요소가 나올 때까지 skip하기 위해 `skipWhile` 을 사용한다.
 	* 프린팅된 값은 `3 4 4`
 * 보험금 청구 앱을 개발한다고 가정해보자. 공제액이 충족될 때까지 보험금 지급을 거부하기 위해 `skipWhile`을 사용할 수 있다. 
 
@@ -198,11 +198,11 @@
 	example(of: "skipUntil") {
 	    let disposeBag = DisposeBag()
 	    
-	    // 1
+	    // a
 	    let subject = PublishSubject<String>()
 	    let trigger = PublishSubject<String>()
 	    
-	    // 2
+	    // b
 	    subject
 	        .skipUntil(trigger)
 	        .subscribe(onNext: {
@@ -210,24 +210,24 @@
 	        })
 	        .disposed(by: disposeBag)
 	    
-	    // 3
+	    // c
 	    subject.onNext("A")
 	    subject.onNext("B")
 	    
-	    // 4
+	    // d
 	    trigger.onNext("X")
 	    
-	    // 5
+	    // e
 	    subject.onNext("C")
 	}
 	```
 	
 	* 주석을 따라 확인해보면, 
-		* 1) `subject`와 `trigger`라는 PublishSubject를 만든다. 
-		* 2) `subject`를 구독하는데 그 전에 `.skipUnitl`을 통해 `trigger`를 추가한다.
-		* 3) `subject`에 `.onNext()`로 `A`, `B` 추가한다.
-		* 4) `trigger`에 `.onNext()`로 `X`를 추가한다.
-		* 5) `subject`에 새로운 이벤트`C`를 추가한다. 그제서야 `C`가 방출되는 것을 콘솔에서 확인할 수 있다. 왜냐하면 그 전까지는 `.skipUnitl`이 막고 있었기 때문이다 
+		1) `subject`와 `trigger`라는 PublishSubject를 만든다. 
+		2) `subject`를 구독하는데 그 전에 `.skipUnitl`을 통해 `trigger`를 추가한다.
+		3) `subject`에 `.onNext()`로 `A`, `B` 추가한다.
+		4) `trigger`에 `.onNext()`로 `X`를 추가한다.
+		5) `subject`에 새로운 이벤트`C`를 추가한다. 그제서야 `C`가 방출되는 것을 콘솔에서 확인할 수 있다. 왜냐하면 그 전까지는 `.skipUnitl`이 막고 있었기 때문이다 
 
 ## D. Taking operators
 
@@ -245,9 +245,9 @@
 	example(of: "take") {
 	    let disposeBag = DisposeBag()
 	    
-	    // 1
+	    // a
 	    Observable.of(1,2,3,4,5,6)
-	        // 2
+	        // b
 	        .take(3)
 	        .subscribe(onNext: {
 	            print($0)
@@ -275,18 +275,18 @@
 	example(of: "takeWhile") {
 	    let disposeBag = DisposeBag()
 	    
-	    // 1
+	    // a
 	    Observable.of(2,2,4,4,6,6)
-	        // 2
+	        // b
 	        .enumerated()
-	        // 3
+	        // c
 	        .takeWhile({ index, value in
-	            // 4
+	            // d
 	            value % 2 == 0 && index < 3
 	        })
-	        // 5
+	        // e
 	        .map { $0.element }
-	        // 6
+	        // f
 	        .subscribe(onNext: {
 	            print($0)
 	        })
@@ -295,12 +295,12 @@
 	```
 	
 	* 주석을 따라 확인해보면
-		* 1) observable을 만든다
-		* 2) `.enumerated`를 이용하여 index와 값을 가지는 튜플을 받아낸다
-		* 3) `.takeWhile`을 이용하여, 튜플 각각의 요소들을 확인한다. 
-		* 4) 짝수이면서 index가 3 미만인 요소를 취하는 로직을 작성한다.
-		* 5) `.map`을 통해 추출한 튜플중에 값만 취하게 한다.
-		* 6) 구독한 값을 찍습니다.
+		1) observable을 만든다
+		2) `.enumerated`를 이용하여 index와 값을 가지는 튜플을 받아낸다
+		3) `.takeWhile`을 이용하여, 튜플 각각의 요소들을 확인한다. 
+		4) 짝수이면서 index가 3 미만인 요소를 취하는 로직을 작성한다.
+		5) `.map`을 통해 추출한 튜플중에 값만 취하게 한다.
+		6) 구독한 값을 찍습니다.
 	* 해당 값인 `2 2 4`가 프린트 됩니다.
 
 ### 4. takeUntil
@@ -316,11 +316,11 @@
 	example(of: "takeUntil") {
 	    let disposeBag = DisposeBag()
 	    
-	    // 1
+	    // a
 	    let subject = PublishSubject<String>()
 	    let trigger = PublishSubject<String>()
 	    
-	    // 2
+	    // b
 	    subject
 	        .takeUntil(trigger)
 	        .subscribe(onNext: {
@@ -328,24 +328,24 @@
 	        })
 	        .disposed(by: disposeBag)
 	    
-	    // 3
+	    // c
 	    subject.onNext("1")
 	    subject.onNext("2")
 	    
-	    // 4
+	    // d
 	    trigger.onNext("X")
 	    
-	    // 5
+	    // e
 	    subject.onNext("3")
 	}
 	```  
 
 	* 주석을 따라 확인해보자.
-		* 1) `subject`와 `trigger` 라는 `PublishSubject<String>`을 각각 만든다.
-		* 2) `takeUntil()` 메소드를 통해 trigger를 연결해주고 구독한다.
-		* 3) `subject`에 `1`, `2`를 `onNext`를 통해 추가한다. (각각 프린트 된다)
-		* 4) `trigger`에 `onNext` 이벤트를 추가한다. 이걸 통해서 `subject`에서 값을 취하는 게 멈출 것이다.
-		* 5) `subject`에 새로운 값`3`을 `onNext` 이벤트로 추가한다. (`3`은 프린트 안되쥬)
+		1) `subject`와 `trigger` 라는 `PublishSubject<String>`을 각각 만든다.
+		2) `takeUntil()` 메소드를 통해 trigger를 연결해주고 구독한다.
+		3) `subject`에 `1`, `2`를 `onNext`를 통해 추가한다. (각각 프린트 된다)
+		4) `trigger`에 `onNext` 이벤트를 추가한다. 이걸 통해서 `subject`에서 값을 취하는 게 멈출 것이다.
+		5) `subject`에 새로운 값`3`을 `onNext` 이벤트로 추가한다. (`3`은 프린트 안되쥬)
 * ~이 책 마지막에서 배울~ RxCocoa 라이브러리의 API를 사용하면 dispose bag에 dispose를 추가하는 방식 대신 `takeUntil`을 통해 구독을 dispose 할 수 있다. 아래의 코드를 살펴보자.
 
 	```swift
@@ -376,9 +376,9 @@
 	example(of: "distincUntilChanged") {
 	    let disposeBag = DisposeBag()
 	    
-	    // 1
+	    // a
 	    Observable.of("A", "A", "B", "B", "A")
-	        //2
+	        // b
 	        .distinctUntilChanged()
 	        .subscribe(onNext: {
 	            print($0)
@@ -388,8 +388,8 @@
 	```
 
 	* 주석을 따라 살펴봅시다.
-		* 1) `String`을 받는 observable을 만든다
-		* 2) `distinctUntilChanged`를 입력하고 구독합니다.
+		1) `String`을 받는 observable을 만든다
+		2) `distinctUntilChanged`를 입력하고 구독합니다.
 	* 연달아 중복되는 index 1,3의 `A`,`B`가 무시되고 `A B A`가 프린트 된다.
 
 ### 2. distinctUntilChanged(_:)
@@ -405,21 +405,21 @@
 	example(of: "distinctUntilChanged(_:)") {
 	    let disposeBag = DisposeBag()
 	    
-	    // 1
+	    // a
 	    let formatter = NumberFormatter()
 	    formatter.numberStyle = .spellOut
 	    
-	    // 2
+	    // b
 	    Observable<NSNumber>.of(10, 110, 20, 200, 210, 310)
-	        // 3
+	        // c
 	        .distinctUntilChanged({ a, b in
-	            //4
+	            // d
 	            guard let aWords = formatter.string(from: a)?.components(separatedBy: " "),
 	                let bWords = formatter.string(from: b)?.components(separatedBy: " ") else {return false}
 	            
 	            var containsMatch = false
 	            
-	            // 5
+	            // e
 	            for aWord in aWords {
 	                for bWord in bWords {
 	                    if aWord == bWord {
@@ -431,7 +431,7 @@
 	            
 	            return containsMatch
 	        })
-	        // 6
+	        // f
 	        .subscribe(onNext: {
 	            print($0)
 	        })
@@ -440,12 +440,12 @@
 	```
 	
 	* 주석을 따라 확인해보자.
-		* 1) 각각의 번호를 배출해내는 `NumberFormatter()`를 만들어낸다.
-		* 2) `NSNumbers` Observable을 만든다. 이렇게 하면 `formatter`를 사용할 때 Int를 변환할 필요가 없다.
-		* 3) `distinctUntilChanged(_:)`는 각각의 seuquence 쌍을 받는 클로저다.
-		* 4) `guard`문을 통해 값들의 구성요소를 빈 칸 구분하여 조건부로 바인딩하고 그렇지 않으면 `false`를 반환한다. 
-		* 5) 중첩 `for-in` 반복문을 통해서 각 쌍의 단어를 반복하고, 검사결과를 반환하여, 두 요소가 동일한 단어를 포함하는지 확인한다.
-		* 6) 구독하고 출력한다.
+		1) 각각의 번호를 배출해내는 `NumberFormatter()`를 만들어낸다.
+		2) `NSNumbers` Observable을 만든다. 이렇게 하면 `formatter`를 사용할 때 Int를 변환할 필요가 없다.
+		3) `distinctUntilChanged(_:)`는 각각의 seuquence 쌍을 받는 클로저다.
+		4) `guard`문을 통해 값들의 구성요소를 빈 칸 구분하여 조건부로 바인딩하고 그렇지 않으면 `false`를 반환한다. 
+		5) 중첩 `for-in` 반복문을 통해서 각 쌍의 단어를 반복하고, 검사결과를 반환하여, 두 요소가 동일한 단어를 포함하는지 확인한다.
+		6) 구독하고 출력한다.
 	* 결과는, 다른 요소를 포함하는 요소는 제외된 결과만 출력된다. `10 20 200`
 	* a, b, c를 비교해가면서 만약 b가 a와 중첩되는 부분이 있어 prevent 되면, 다음엔 b와 c를 비교하는 것이 아니라 a와 b를 비교하게 됩니다.
 
